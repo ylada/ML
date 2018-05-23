@@ -80,11 +80,26 @@ housing[housing["income_cal"]>5] = 5
         print(imputer.statistics_)
         x=imputer.transform(df_num)  #transform and turn into numpy array
     3.3 encode text and categorical attributes
-        3.3.1 from sklearn.preprocessing import LabelEncoder
-              encoder = LabelEncoder
-              df_cat = df["ocean"].apply(str)  #covert series to np string
-              df_encoded=encoder.fit_transoform(df_cat)
-              print(encoder.classes_)
+        3.3.1 # distance of simple encode may affect: 2,3 more related than 5
+          from sklearn.preprocessing import LabelEncoder
+          encoder = LabelEncoder
+          df_cat = df["ocean"].apply(str)  #covert series to np string
+          df_encoded=encoder.fit_transoform(df_cat)
+          print(encoder.classes_)
+        3.3.2 # OneHotEncoder avoids relevant numbers using binary column/attrib
+              # Do above encoding first, then do OneHot
+          from sklearn.preprocessing import OneHotEncoder
+          encoder = OneHotEncoder()
+          df_1hot = encoder.fit_transform(df_encoded.reshape(-1,1)) #sparse matr
+          df_1hot.toarray()
+        3.3.3 #combine the above two
+          from sklearn.preprocessing import LabelBinarizer
+          encoder = LabelBinarizer()    #return NP array unless sparse_out=True 
+          df_1hot=encoder.fit_transform(df["cat"]) #cat is the column with text
+          type(df_1hot)    #is numpy array
+    3.4 Feature Scaling
+        3.4.1  min-max scaling using MinMaxScaler() or (x-min)/(max-min)
+        3.4.2  standard scaling using StandardScaler()
         
 ------------            End of Prepare Data   -------------------------
 """
@@ -135,8 +150,14 @@ imputer.fit(housing_num)    #fit training data, to process train and test data
 print(imputer.statistics_)  #calculate all median for all numberic columns
 X = imputer.transform(housing_num) #transform training data with missing value
 
-# convert text labels to numbers
-from sklearn.preprocessing import LabelEncoder
-encoder = LabelEncoder()
+# convert text labels to numbers, simple encode; complication with numbers
+#from sklearn.preprocessing import LabelEncoder
+#encoder = LabelEncoder()
+#housing_cat = housing["ocean_proximity"].apply(str) #encode string, not series
+#housing_cat_encoded = encoder.fit_transform(housing_cat) 
+
+# OneHotEncode, turn binary attributes/columns, number value doesnot matter
+from sklearn.preprocessing import LabelBinarizer
+encoder = LabelBinarizer()    #return NP array unless sparse_out=True 
 housing_cat = housing["ocean_proximity"].apply(str) #encode string, not series
-housing_cat_encoded = encoder.fit_transform(housing_cat) 
+housing_1hot=encoder.fit_transform(housing_cat) 
