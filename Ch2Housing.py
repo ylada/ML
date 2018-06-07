@@ -25,6 +25,7 @@ HOUSING_PATH = "datasets/housing"
 # 2. observe
     2.1  df.head()  .hist()   .describe()   .info()
     2.2  df["income"].value_counts()  df.income.value_counts()
+    2.3  np.unique(df["income"]), np.unique(df.["price"])
 # 3.  modify
     3.1  add column to df:   df["new_col"]=np.ceil(df["income"]*6.3)
     3.2  drop column: new=df.drop("income", axis=1); doesnot change df itself
