@@ -1,0 +1,27 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun 13 08:22:17 2018
+Hands on machine Learning with Scikit-Learn and Tensorflow
+Chapter 4: Regression (Linear, Polynominal, Logistic, softmax)
+@author: liaoy
+
+
+------------            Linear Regression          -------------------------
+1. linear regression computes weighted sum of features, plus a bias (intercept)
+   Perfomance measure: Mean Square Error(MSE)
+
+"""
+
+import numpy as np
+
+
+X = 2* np.random.rand(100, 1)
+y = 4 + 3 * X + np.random.rand(100, 1)
+X_new = np.array([[0], [2]])
+
+from sklearn.linear_model import LinearRegression
+lin_reg = LinearRegression()
+lin_reg.fit(X, y)
+print(lin_reg.intercept_, lin_reg.coef_)
+print(lin_reg.predict(X_new))
+
